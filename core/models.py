@@ -14,6 +14,11 @@ class Section(models.Model):
 
 
 class Company(models.Model):
+
+    class Meta:
+        verbose_name = "Company"
+        verbose_name_plural = "Companies"
+
     name = models.CharField(max_length=30)
     contact_person = models.CharField(max_length=30)
     email = models.EmailField()
