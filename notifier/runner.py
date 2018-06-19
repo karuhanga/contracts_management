@@ -1,18 +1,12 @@
 from datetime import date, timedelta
+from core.utils.monitor_utils import log
+from .email import send_email
 
 from core.models import Contract
 from .models import NotificationPoint, NotificationStatus
 
 TODAY = ''  # Holds today's date
 DATES = []  # Holds calculated dates based on notification_points
-
-
-# writes message to log file
-# args - message to write
-# returns - None
-# logs - haha :)
-def log(info):
-    pass
 
 
 # provides interface to access generated dates
@@ -32,8 +26,21 @@ def get_date(i):
 # args - notification_point; that triggered this, contract; whose expiry is pending
 # returns - None
 # logs - No
+def generate_body(notification_point, contract):
+    return "This is to inform you of a looming contract expiry.\nDetails:\n" + contract + "\n\nThis contract expires in " + notification_point
+
+
+def generate_subject(notification_point):
+    return "Contract Review due in " + notification_point
+
+
 def notify(notification_point, contract):
-    pass
+    subject = generate_subject(notification_point)
+    body = generate_body(notification_point, contract)
+    to = contract.contract_manager.email
+    # bcc TODO Implement optional carbon copy to manager
+
+    send_email(to, subject, body)
 
 
 # notifies concerned party of expiry
@@ -42,7 +49,12 @@ def notify(notification_point, contract):
 # returns - None
 # logs - No
 def notify_passed(contract):
-    pass
+    subject = "Contract Review Overdue"
+    body = "Details: \n" + contract
+    to = contract.contract_manager.email
+    # bcc TODO Implement optional carbon copy to manager
+
+    send_email(to, subject, body)
 
 
 # generates dates based on arg(notification_points)
