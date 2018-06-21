@@ -7,7 +7,7 @@ class ContractManagerForm(forms.ModelForm):
 
     class Meta:
         model = ContractManager
-        fields = ('name','email','contract' )
+        fields = ('name','email','contract')
 
 
 
