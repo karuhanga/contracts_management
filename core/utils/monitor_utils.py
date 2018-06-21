@@ -6,3 +6,7 @@
 # logs - haha :)
 def log(info):
     pass
+
+
+def test_log(data):
+    print(data)

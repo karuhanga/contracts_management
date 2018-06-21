@@ -7,10 +7,16 @@ class ContractManager(models.Model):
     email = models.EmailField()
     contact = models.CharField(max_length=15)
 
+    def __str__(self):
+        return self.name
+
 
 class Section(models.Model):
     name = models.CharField(max_length=20)
     description = models.TextField()
+
+    def __str__(self):
+        return self.description
 
 
 class Company(models.Model):
@@ -37,15 +43,18 @@ class Contract(models.Model):
     expiry_date = models.DateField()
     contract_manager = models.ForeignKey('ContractManager', on_delete=models.DO_NOTHING)
 
+    def summary(self):
+        return "Name: {} \nDescription: {} \nSection: {} \nCompany: {} \nExpiring: {} \n".format(self.name,
+                                                                                                 self.description,
+                                                                                                 self.section,
+                                                                                                 self.company,
+                                                                                                 self.expiry_date)
+
     def __str__(self):
-        return "Name: %s \n Description: %s \n Section: %s \n Company: %s \n Expiring: %s \n".format(self.name,
-                                                                                                     self.description,
-                                                                                                     self.section,
-                                                                                                     self.company,
-                                                                                                     self.expiry_date)
+        return self.name
 
     def __unicode__(self):
-        return "Name: %s \n Description: %s \n Section: %s \n Company: %s \n Expiring: %s \n".format(self.name,
+        return "Name: {} \n Description: {} \n Section: {} \n Company: {} \n Expiring: {} \n".format(self.name,
                                                                                                      self.description,
                                                                                                      self.section,
                                                                                                      self.company,

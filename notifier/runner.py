@@ -1,5 +1,5 @@
 from datetime import date, timedelta
-from core.utils.monitor_utils import log
+from core.utils.monitor_utils import log, test_log
 from .email import send_email
 
 from core.models import Contract
@@ -27,11 +27,12 @@ def get_date(i):
 # returns - None
 # logs - No
 def generate_body(notification_point, contract):
-    return "This is to inform you of a looming contract expiry.\nDetails:\n" + contract + "\n\nThis contract expires in " + notification_point
+    return "This is to inform you of a looming contract expiry.\nDetails:\n" + contract.summary() + "\n\nThis contract expires in " + str(
+        notification_point)
 
 
 def generate_subject(notification_point):
-    return "Contract Review due in " + notification_point
+    return "Contract Review due in " + str(notification_point)
 
 
 def notify(notification_point, contract):
@@ -85,7 +86,7 @@ def check_notify(contract, notification_points):
 
     for i in range(0, len(notification_points)):
         date_to_check = get_date(i)
-        if date_to_check > TODAY:
+        if date_to_check > contract.expiry_date:
             notify(notification_points[i], contract)
             return
 
@@ -101,6 +102,8 @@ def run_due_checker():
     global TODAY
 
     notification_points = NotificationPoint.objects.order_by('when_time_left').all()
+
+    test_log(notification_points)
 
     if len(notification_points) == 0:
         log("No notification points added")

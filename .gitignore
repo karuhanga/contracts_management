@@ -3,6 +3,6 @@ env/*
 .idea
 env
 */__pycache__/*
-*/__pycache__
+**/__pycache__
 db.sqlite3
-
+test.py
