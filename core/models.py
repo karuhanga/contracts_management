@@ -2,6 +2,9 @@ from django.db import models
 
 
 # Create your models here.
+from django.urls import reverse
+
+
 class ContractManager(models.Model):
     name = models.CharField(max_length=30)
     email = models.EmailField()
@@ -10,6 +13,9 @@ class ContractManager(models.Model):
     def __str__(self):
         return self.name
 
+    def get_absolute_url(self):
+        return reverse('managers', kwargs={'pk': self.pk})
+
 
 class Section(models.Model):
     name = models.CharField(max_length=20)
@@ -17,6 +23,9 @@ class Section(models.Model):
 
     def __str__(self):
         return self.description
+
+    def get_absolute_url(self):
+        return reverse('sections', kwargs={'pk': self.pk})
 
 
 class Company(models.Model):
@@ -32,6 +41,9 @@ class Company(models.Model):
 
     def __str__(self):
         return self.name
+
+    def get_absolute_url(self):
+        return reverse('companys', kwargs={'pk': self.pk})
 
 
 class Contract(models.Model):
@@ -60,4 +72,5 @@ class Contract(models.Model):
                                                                                                      self.company,
                                                                                                      self.expiry_date)
 
-
+    def get_absolute_url(self):
+        return reverse('contracts', kwargs={'pk': self.pk})

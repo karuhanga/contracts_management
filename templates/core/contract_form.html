@@ -1,0 +1,40 @@
+{% load static %}
+{% load m_in %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Contracts</title>
+    <link rel="stylesheet" href='{% static "css/bulma.min.css" %}'>
+</head>
+<body>
+<section class="section">
+    <div class="columns">
+
+        <div class="column is-narrow is-center is-offset-one-quarter">
+
+            <form method="post" action="{% url 'contracts_create' %}">
+                {% csrf_token %}
+                {% for field in form %}
+                    <div class="control">
+                        {{ field.errors }}
+                        {{ field.label_tag }}
+                        {% if field.label|in_list:"Section,Company,Contract manager" %}
+                            <div class="select">{{ field }}</div>
+                        {% else %}
+                            {{ field }}
+                        {% endif %}
+                        {% if field.help_text %}
+                            <p class="help">{{ field.help_text|safe }}</p>
+                        {% endif %}
+                    </div>
+                    <br>
+                {% endfor %}
+                <input class="button is-link" type="submit" value="Submit">
+            </form>
+
+        </div>
+    </div>
+</section>
+</body>
+</html>
