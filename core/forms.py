@@ -1,5 +1,5 @@
 from django import forms
-from core.models import ContractManager,Section,Company,Contract
+from core.models import ContractManager, Section, Company, Contract
 
 
 # Here are forms for input
@@ -16,7 +16,6 @@ class SectionForm(forms.ModelForm):
     class Meta:
         model = Section
         fields = '__all__'
-
 
 
 class CompanyForm(forms.ModelForm):
