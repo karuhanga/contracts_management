@@ -22,5 +22,5 @@ urlpatterns = [
     path('success', views.success, name="success"),
     path('contracts/add', ContractsViewCreate.as_view(), name="contracts_create"),
     path('contracts/<int:pk>/update', ContractsViewUpdate.as_view(), name="contracts_update"),
-    path('contracts/<int:pk>/delete', ContractsViewDelete.as_view(), name="contracts_delete")
+    path('contracts/<int:pk>/delete', ContractsViewDelete.as_view(), name="contracts_delete"),
 ]
