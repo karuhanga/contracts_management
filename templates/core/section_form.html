@@ -4,27 +4,26 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Contracts</title>
+    <title>Sections</title>
     <link rel="stylesheet" href='{% static "css/bulma.min.css" %}'>
+
+
 </head>
 <body>
+
+
 <section class="section">
     <div class="columns">
 
         <div class="column is-narrow is-center is-offset-one-quarter">
 
-            <form method="post" action="{% url 'contracts_create' %}">
+            <form method="post" action="{% url 'sections_create' %}">
                 {% csrf_token %}
                 {% for field in form %}
                     <div class="control">
                         {{ field.errors }}
                         {{ field.label_tag }}
-                        {% if field.label|in_list:"Section,Company,Contract manager" %}
-                            <br>
-                            <div class="select">{{ field }}</div>
-                        {% else %}
-                            {{ field }}
-                        {% endif %}
+                        {{ field }}
                         {% if field.help_text %}
                             <p class="help">{{ field.help_text|safe }}</p>
                         {% endif %}
@@ -39,5 +38,7 @@
         </div>
     </div>
 </section>
+
+
 </body>
 </html>

@@ -11,17 +11,35 @@ class ContractManagerForm(forms.ModelForm):
         model = ContractManager
         fields = '__all__'
 
+    def __init__(self, *args, **kwargs):
+        super(ContractManagerForm, self).__init__(*args, **kwargs)
+        self.fields['name'].widget.attrs.update({CLASS: INPUT})
+        self.fields['email'].widget.attrs.update({CLASS: INPUT})
+        self.fields['contact'].widget.attrs.update({CLASS: INPUT})
 
 class SectionForm(forms.ModelForm):
     class Meta:
         model = Section
         fields = '__all__'
 
+    def __init__(self, *args, **kwargs):
+        super(SectionForm, self).__init__(*args, **kwargs)
+        self.fields['name'].widget.attrs.update({CLASS: INPUT})
+        self.fields['description'].widget.attrs.update({CLASS: INPUT})
+
+
 
 class CompanyForm(forms.ModelForm):
     class Meta:
         model = Company
         fields = '__all__'
+
+    def __init__(self, *args, **kwargs):
+        super(CompanyForm, self).__init__(*args, **kwargs)
+        self.fields['name'].widget.attrs.update({CLASS: INPUT})
+        self.fields['contact_person'].widget.attrs.update({CLASS: INPUT})
+        self.fields['email'].widget.attrs.update({CLASS: INPUT})
+        self.fields['contact'].widget.attrs.update({CLASS: INPUT})
 
 
 class ContractForm(forms.ModelForm):
