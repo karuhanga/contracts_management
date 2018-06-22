@@ -6,3 +6,5 @@ env
 **/__pycache__
 db.sqlite3
 test.py
+venv
+venv/*
