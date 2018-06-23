@@ -22,26 +22,25 @@ from core.views import CompanyViewCreate, CompanyViewDelete, CompanyViewUpdate
 from core.views import ContractManagerViewCreate, ContractManagerViewUpdate, ContractManagerViewDelete
 
 
-
-
 urlpatterns = [
     path('success', views.success, name="success"),
+    path('contracts', views.get_contracts, name="contracts_retrieve"),
     path('contracts/add', ContractsViewCreate.as_view(), name="contracts_create"),
     path('contracts/<int:pk>/update', ContractsViewUpdate.as_view(), name="contracts_update"),
     path('contracts/<int:pk>/delete', ContractsViewDelete.as_view(), name="contracts_delete"),
 
+    path('managers', views.get_managers, name="managers_retrieve"),
     path('managers/add', ContractManagerViewCreate.as_view(), name="managers_create"),
     path('managers/<int:pk>/update', ContractManagerViewUpdate.as_view(), name="managers_update"),
     path('managers/<int:pk>/delete', ContractManagerViewDelete.as_view(), name="managers_delete"),
 
+    path('sections', views.get_sections, name="sections_retrieve"),
     path('sections/add', SectionViewCreate.as_view(), name="sections_create"),
     path('sections/<int:pk>/update', SectionViewUpdate.as_view(), name="sections_update"),
     path('sections/<int:pk>/delete', SectionViewDelete.as_view(), name="sections_delete"),
 
+    path('companies', views.get_companies, name="companies_retrieve"),
     path('companies/add', CompanyViewCreate.as_view(), name="companies_create"),
     path('companies/<int:pk>/update', CompanyViewUpdate.as_view(), name="companies_update"),
     path('companies/<int:pk>/delete', CompanyViewDelete.as_view(), name="companies_delete")
-
-
-
 ]

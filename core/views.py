@@ -1,5 +1,8 @@
-from django.http import HttpResponseRedirect
+from django.core import serializers
+from django.http import JsonResponse
 from django.shortcuts import render
+
+import json
 
 # Create your views here.
 from django.views.generic.edit import CreateView, UpdateView, DeleteView
@@ -8,6 +11,40 @@ from core.forms import ContractForm, SectionForm, ContractManagerForm, CompanyFo
 
 from core.models import Contract, Section, ContractManager, Company
 from core.utils.StringUtils import SUCCESS_URL
+
+
+def jsonify(data):
+    state_additions = {
+        "popup_active": False
+    }
+    data = serializers.serialize('json', data)
+    data = json.loads(data)
+    for datum in data:
+        fields = dict(datum["fields"])
+        datum.update(fields)
+        datum.update(state_additions)
+        datum["fields"] = ""
+    return data
+
+
+def get_contracts(request):
+    data = jsonify(Contract.objects.all())
+    return JsonResponse(data, safe=False)
+
+
+def get_companies(request):
+    data = jsonify(Company.objects.all())
+    return JsonResponse(data, safe=False)
+
+
+def get_managers(request):
+    data = jsonify(ContractManager.objects.all())
+    return JsonResponse(data, safe=False)
+
+
+def get_sections(request):
+    data = jsonify(Section.objects.all())
+    return JsonResponse(data, safe=False)
 
 
 class ContractsViewCreate(CreateView):
