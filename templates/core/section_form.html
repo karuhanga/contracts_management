@@ -17,7 +17,15 @@
 
         <div class="column is-narrow is-center is-offset-one-quarter">
 
+            {% if form.instance and form.instance.pk %}
+
+                <form method="post" action="{% url 'sections_update' form.instance.pk %}">
+
+            {% else %}
+
             <form method="post" action="{% url 'sections_create' %}">
+
+            {% endif %}
                 {% csrf_token %}
                 {% for field in form %}
                     <div class="control">

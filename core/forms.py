@@ -2,7 +2,6 @@ from django import forms
 from core.models import ContractManager, Section, Company, Contract
 
 
-# Here are forms for input
 from core.utils.StringUtils import CLASS, INPUT, TEXT_AREA, SELECT
 
 
@@ -16,6 +15,7 @@ class ContractManagerForm(forms.ModelForm):
         self.fields['name'].widget.attrs.update({CLASS: INPUT})
         self.fields['email'].widget.attrs.update({CLASS: INPUT})
         self.fields['contact'].widget.attrs.update({CLASS: INPUT})
+
 
 class SectionForm(forms.ModelForm):
     class Meta:

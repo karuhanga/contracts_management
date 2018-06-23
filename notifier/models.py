@@ -2,6 +2,9 @@ from django.db import models
 
 
 # Create your models here.
+from django.urls import reverse
+
+
 class NotificationPoint(models.Model):
     name = models.CharField(max_length=30)
     when_time_left = models.IntegerField()  # counted in days
