@@ -116,9 +116,17 @@ TIME_ZONE = 'UTC'
 
 USE_I18N = True
 
-USE_L10N = True
+# USE_L10N = True # Localisation
 
 USE_TZ = True
+
+# Date format settings
+DATE_INPUT_FORMATS = [
+    "%d/%m/%y",  # '25/10/06'
+    "%d/%m/%Y",  # '25/10/2006'
+    "%d %B %Y",  # '25 October 2006'
+    "%d %B, %Y"  # '25 October, 2006'
+]
 
 
 # Static files (CSS, JavaScript, Images)

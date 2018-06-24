@@ -5,6 +5,7 @@
 <head>
     <meta charset="UTF-8">
     <title>Sections</title>
+    <link rel="stylesheet" href='{% static "css/touchup.css" %}' type="text/css">
     <link rel="stylesheet" href='{% static "css/bulma.min.css" %}'>
 
 
@@ -26,7 +27,8 @@
             <form method="post" action="{% url 'sections_create' %}">
 
             {% endif %}
-                {% csrf_token %}
+
+            {% csrf_token %}
                 {% for field in form %}
                     <div class="control">
                         {{ field.errors }}

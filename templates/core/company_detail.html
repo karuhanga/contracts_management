@@ -1,0 +1,25 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href='{% static "css/touchup.css" %}' type="text/css">
+    <link rel="stylesheet" href='{% static "css/bulma.min.css" %}'>
+    <title>Company</title>
+</head>
+<body>
+<section class="section">
+    <div class="columns">
+        <div class="column is-offset-5 is-2 has-text-centered">
+            {{ object.name }}
+            <hr>
+            {{ object.contact_person }}
+            <hr>
+            {{ object.email }}
+            <hr>
+            {{ object.contact }}
+        </div>
+    </div>
+</section>
+</body>
+</html>

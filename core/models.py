@@ -2,6 +2,7 @@ from django.db import models
 
 
 # Create your models here.
+# TODO Update Contracts model to clear Notification Statuses on create or update
 from django.urls import reverse
 
 
@@ -14,7 +15,7 @@ class ContractManager(models.Model):
         return self.name
 
     def get_absolute_url(self):
-        return reverse('managers', kwargs={'pk': self.pk})
+        return reverse('manager', kwargs={'pk': self.pk})
 
 
 class Section(models.Model):
@@ -25,7 +26,7 @@ class Section(models.Model):
         return self.description
 
     def get_absolute_url(self):
-        return reverse('sections', kwargs={'pk': self.pk})
+        return reverse('section', kwargs={'pk': self.pk})
 
 
 class Company(models.Model):
@@ -43,17 +44,17 @@ class Company(models.Model):
         return self.name
 
     def get_absolute_url(self):
-        return reverse('companys', kwargs={'pk': self.pk})
+        return reverse('company', kwargs={'pk': self.pk})
 
 
 class Contract(models.Model):
     name = models.CharField(max_length=100)
     description = models.TextField()
-    section = models.ForeignKey('Section', on_delete=models.DO_NOTHING)
-    company = models.ForeignKey('Company', on_delete=models.CASCADE)
+    section = models.ForeignKey('Section', on_delete=models.PROTECT)
+    company = models.ForeignKey('Company', on_delete=models.PROTECT)
     start_date = models.DateField()
     expiry_date = models.DateField()
-    contract_manager = models.ForeignKey('ContractManager', on_delete=models.DO_NOTHING)
+    contract_manager = models.ForeignKey('ContractManager', on_delete=models.PROTECT)
 
     def summary(self):
         return "Name: {} \nDescription: {} \nSection: {} \nCompany: {} \nExpiring: {} \n".format(self.name,
@@ -73,4 +74,4 @@ class Contract(models.Model):
                                                                                                      self.expiry_date)
 
     def get_absolute_url(self):
-        return reverse('contracts', kwargs={'pk': self.pk})
+        return reverse('contract', kwargs={'pk': self.pk})

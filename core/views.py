@@ -1,10 +1,11 @@
 from django.core import serializers
-from django.http import JsonResponse
-from django.shortcuts import render
+from django.http import JsonResponse, HttpResponseBadRequest, HttpResponseServerError
+from django.shortcuts import render, redirect
 
 import json
 
 # Create your views here.
+from django.views.generic import DetailView
 from django.views.generic.edit import CreateView, UpdateView, DeleteView
 
 from core.forms import ContractForm, SectionForm, ContractManagerForm, CompanyForm
@@ -27,8 +28,16 @@ def jsonify(data):
     return data
 
 
+def home(request):
+    return render(request, "dashboard.html")
+
+
 def get_contracts(request):
     data = jsonify(Contract.objects.all())
+    for datum in data:
+        datum["section"] = Section.objects.get(pk=datum["section"]).name
+        datum["company"] = Company.objects.get(pk=datum["company"]).name
+        datum["contract_manager"] = ContractManager.objects.get(pk=datum["contract_manager"]).name
     return JsonResponse(data, safe=False)
 
 
@@ -47,6 +56,10 @@ def get_sections(request):
     return JsonResponse(data, safe=False)
 
 
+class ContractsViewRetrieve(DetailView):
+    model = Contract
+
+
 class ContractsViewCreate(CreateView):
     model = Contract
     form_class = ContractForm
@@ -57,9 +70,20 @@ class ContractsViewUpdate(UpdateView):
     form_class = ContractForm
 
 
-class ContractsViewDelete(DeleteView):
-    model = Contract
-    success_url = SUCCESS_URL
+def delete_contract(request, pk=None):
+    if pk is None:
+        return HttpResponseBadRequest()
+
+    try:
+        item = Contract.objects.get(pk=pk)
+        item.delete()
+        return redirect(SUCCESS_URL)
+    except Exception:
+        return HttpResponseServerError()
+
+
+class SectionsViewRetrieve(DetailView):
+    model = Section
 
 
 class SectionViewCreate(CreateView):
@@ -72,9 +96,21 @@ class SectionViewUpdate(UpdateView):
     form_class = SectionForm
 
 
-class SectionViewDelete(DeleteView):
-    model = Section
-    success_url = SUCCESS_URL
+def delete_manager(request, pk=None):
+    if pk is None:
+        return HttpResponseBadRequest()
+
+    try:
+        item = ContractManager.objects.get(pk=pk)
+        item.delete()
+        return redirect(SUCCESS_URL)
+    except Exception as e:
+        print(e)
+        return HttpResponseServerError()
+
+
+class ContractManagerViewRetrieve(DetailView):
+    model = ContractManager
 
 
 class ContractManagerViewCreate(CreateView):
@@ -87,9 +123,20 @@ class ContractManagerViewUpdate(UpdateView):
     form_class = ContractManagerForm
 
 
-class ContractManagerViewDelete(DeleteView):
-    model = ContractManager
-    success_url = SUCCESS_URL
+def delete_contract(request, pk=None):
+    if pk is None:
+        return HttpResponseBadRequest()
+
+    try:
+        item = Contract.objects.get(pk=pk)
+        item.delete()
+        return redirect(SUCCESS_URL)
+    except Exception:
+        return HttpResponseServerError()
+
+
+class CompanyViewRetrieve(DetailView):
+    model = Company
 
 
 class CompanyViewCreate(CreateView):
@@ -102,9 +149,16 @@ class CompanyViewUpdate(UpdateView):
     form_class = CompanyForm
 
 
-class CompanyViewDelete(DeleteView):
-    model = Company
-    success_url = SUCCESS_URL
+def delete_company(request, pk=None):
+    if pk is None:
+        return HttpResponseBadRequest()
+
+    try:
+        item = Company.objects.get(pk=pk)
+        item.delete()
+        return redirect(SUCCESS_URL)
+    except Exception:
+        return HttpResponseServerError()
 
 
 def success(request):

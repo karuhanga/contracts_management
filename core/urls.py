@@ -16,31 +16,33 @@ Including another URLconf
 from django.urls import path
 
 from core import views
-from core.views import ContractsViewCreate, ContractsViewUpdate, ContractsViewDelete
-from core.views import SectionViewCreate, SectionViewDelete, SectionViewUpdate
-from core.views import CompanyViewCreate, CompanyViewDelete, CompanyViewUpdate
-from core.views import ContractManagerViewCreate, ContractManagerViewUpdate, ContractManagerViewDelete
+from core.views import ContractsViewCreate, ContractsViewUpdate, ContractsViewRetrieve, \
+    ContractManagerViewRetrieve, SectionsViewRetrieve, CompanyViewRetrieve, delete_contract
+from core.views import CompanyViewCreate, delete_company, CompanyViewUpdate
+from core.views import ContractManagerViewCreate, ContractManagerViewUpdate, delete_manager
 
 
 urlpatterns = [
+    path('', views.home, name="dashboard"),
     path('success', views.success, name="success"),
     path('contracts', views.get_contracts, name="contracts_retrieve"),
     path('contracts/add', ContractsViewCreate.as_view(), name="contracts_create"),
+    path('contracts/<int:pk>', ContractsViewRetrieve.as_view(), name="contract"),
     path('contracts/<int:pk>/update', ContractsViewUpdate.as_view(), name="contracts_update"),
-    path('contracts/<int:pk>/delete', ContractsViewDelete.as_view(), name="contracts_delete"),
+    path('contracts/<int:pk>/delete', delete_contract, name="contracts_delete"),
 
     path('managers', views.get_managers, name="managers_retrieve"),
     path('managers/add', ContractManagerViewCreate.as_view(), name="managers_create"),
+    path('managers/<int:pk>', ContractManagerViewRetrieve.as_view(), name="manager"),
     path('managers/<int:pk>/update', ContractManagerViewUpdate.as_view(), name="managers_update"),
-    path('managers/<int:pk>/delete', ContractManagerViewDelete.as_view(), name="managers_delete"),
+    path('managers/<int:pk>/delete', delete_manager, name="managers_delete"),
 
     path('sections', views.get_sections, name="sections_retrieve"),
-    path('sections/add', SectionViewCreate.as_view(), name="sections_create"),
-    path('sections/<int:pk>/update', SectionViewUpdate.as_view(), name="sections_update"),
-    path('sections/<int:pk>/delete', SectionViewDelete.as_view(), name="sections_delete"),
+    path('sections/<int:pk>', SectionsViewRetrieve.as_view(), name="section"),
 
     path('companies', views.get_companies, name="companies_retrieve"),
     path('companies/add', CompanyViewCreate.as_view(), name="companies_create"),
+    path('companies/<int:pk>', CompanyViewRetrieve.as_view(), name="company"),
     path('companies/<int:pk>/update', CompanyViewUpdate.as_view(), name="companies_update"),
-    path('companies/<int:pk>/delete', CompanyViewDelete.as_view(), name="companies_delete")
+    path('companies/<int:pk>/delete', delete_company, name="companies_delete")
 ]

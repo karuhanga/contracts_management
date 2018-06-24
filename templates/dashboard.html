@@ -1,0 +1,310 @@
+{% load static %}
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href='{% static "css/bulma.min.css" %}' type="text/css">
+    <link rel="stylesheet" href='{% static "css/touchup.css" %}' type="text/css">
+    <link rel="stylesheet" href='{% static "css/bulma-docs.min.css" %}' type="text/css">
+    <link rel="stylesheet" href='{% static "css/native-toast.css" %}' type="text/css">
+    <link rel="stylesheet" href='{% static "css/animate.min.css" %}' type="text/css" media="all"/>
+    <script type="text/javascript" src='{% static "js/vue.js" %}'></script>
+    <script type="text/javascript" src='{% static "js/state.js" %}'></script>
+    <script type="text/javascript" src='{% static "js/native-toast.min.js" %}'></script>
+    <title>Contracts Management</title>
+</head>
+<body class="has-navbar-fixed-top">
+<div v-cloak @click="clear_all(); clear_all_company(); clear_all_manager();" id="app">
+    <nav class="animated fadeInDown navbar is-fixed-top is-transparent">
+        <div class="navbar-brand">
+            <div class="navbar-item" disabled="disabled">
+                <span v-text="'Contracts Management: ' + current"></span>
+            </div>
+            <!--<span class="is-large">Contracts Management</span>-->
+        </div>
+        <div class="navbar-menu">
+            <div class="navbar-start">
+
+            </div>
+            <div class="navbar-end">
+                <div v-if="searching" id="navbar-item-search" class="navbar-item control animated fadeIn">
+                    <input v-model="search_text" id="search-bar" type="search" :placeholder="'Search '+current"
+                           class="input is-primary">
+                </div>
+                <div @click="toggle" v-if="not_searching" class="navbar-item control animated slideInRight"><img
+                        class="fill-parent" src='{% static "img/ic_search_24px.svg" %}' alt=""></div>
+                <div @click="toggle" v-if="searching" class="navbar-item control animated slideInRight"><img
+                        class="fill-parent" src='{% static "img/ic_close_24px.svg" %}' alt=""></div>
+            </div>
+        </div>
+    </nav>
+
+    <div class="section no-margins">
+        <div class="columns no-margins">
+            <aside id="nav-menu" class="animated fadeInLeft is-fixed menu column is-2 has-text-right">
+                <p class="menu-label">CONTRACTS DESK</p>
+                <ul class="menu-list">
+                    <li><a @click="show_upcoming();" :class="{'is-active':upcoming_active}">Review upcoming</a></li>
+                    <li><a @click="show_all();" :class="{'is-active':all_active}">All Contracts</a></li>
+                    <li><a @click="show_companies();" :class="{'is-active':companies_active}">Companies</a></li>
+                    <li><a @click="show_managers();" :class="{'is-active':managers_active}">Managers</a></li>
+                </ul>
+                <p class="menu-label">SETTINGS</p>
+                <ul class="menu-list">
+                    <li><a @click="show_notifs();" :class="{'is-active':notifs_active}">Notification settings</a></li>
+                </ul>
+                <hr>
+                <div class="has-text-centered animated fadeIn">
+                    <a>
+                        <button @click="add_clicked();" v-text="'Add ' + current_singular" class="button"></button>
+                    </a>
+                    <hr>
+                </div>
+                <div class="has-text-centered animated fadeIn">
+                    Last notification: <br>
+                    11/6/18
+                    <hr>
+                    Earliest contract due: <br>
+                    13/7/18
+                </div>
+            </aside>
+
+            <div class="spinner column is-offset-2"><img src='{% static "img/dual_ring.gif" %}' alt="Loading..."></div>
+
+            <div @click="clear_all();" id="all-contracts-holder" class="column is-offset-2 animated fadeIn"
+                 v-if="all_active || upcoming_active">
+                <table class="table is-striped is-hoverable is-fullwidth">
+                    <thead>
+                    <tr>
+                        <th>Contract</th>
+                        <th>Section</th>
+                        <th>Contractor</th>
+                        <th>Started</th>
+                        <th>
+                            Expires
+                            <div :class="{'is-active':sort_menu_active}" class="dropdown is-right is-pulled-right">
+                                <div @click.stop="sort_menu_active = !sort_menu_active;" class="dropdown-trigger">
+                                    <img aria-haspopup="true" aria-controls="sort-menu"
+                                         src={% static "img/ic_more_vert_24px.svg" %}
+                                                 alt="More">
+                                </div>
+                                <div class="dropdown-menu" id="sort-menu" role="menu">
+                                    <div class="dropdown-content">
+                                        <a @click="sort_upcoming();" href="#" class="dropdown-item">
+                                            Sort by upcoming
+                                        </a>
+                                        <a @click="sort_section();" href="#" class="dropdown-item">
+                                            Sort by section
+                                        </a>
+                                        <!--<a @click="update_expiry(contract.pk);" href="#" class="dropdown-item">-->
+                                        <!--Update Expiry-->
+                                        <!--</a>-->
+                                        <!--<a :href="'//contracts?id='+contract.pk" class="dropdown-item" target="_blank">-->
+                                        <!--Edit-->
+                                        <!--</a>-->
+                                    </div>
+                                </div>
+                            </div>
+                        </th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr v-for="contract in contracts">
+                        <td v-text="contract.name"></td>
+                        <td v-text="contract.section"></td>
+                        <td v-text="contract.company"></td>
+                        <td v-text="contract.start_date"></td>
+                        <td>
+                            <span v-text="contract.expiry_date"></span>
+                            <div :class="{'is-active':contract.popup_active}" class="dropdown is-right is-pulled-right">
+                                <div @click.stop="current_state = contract.popup_active; clear_all(); contract.popup_active = !(current_state);"
+                                     class="dropdown-trigger">
+                                    <img aria-haspopup="true" :aria-controls="contract.pk"
+                                         src='{% static "img/ic_more_vert_24px.svg" %}' alt="More">
+                                </div>
+                                <div class="dropdown-menu" :id="contract.pk" role="menu">
+                                    <div class="dropdown-content">
+                                        <a @click="contract.popup_active = false; details(contract.pk);"
+                                           class="dropdown-item">
+                                            Details
+                                        </a>
+                                        <a @click="contract.popup_active = false; contact_company(contract.pk);"
+                                           class="dropdown-item">
+                                            Contact Company
+                                        </a>
+                                        <!--<a @click="update_expiry(contract.pk);" href="#" class="dropdown-item">-->
+                                        <!--Update Expiry-->
+                                        <!--</a>-->
+                                        <a @click="contract.popup_active = false; edit_clicked(contract.pk)"
+                                           class="dropdown-item">
+                                            Edit
+                                        </a>
+                                        <a @click="contract.popup_active = false; delete_clicked(contract.pk)"
+                                           class="dropdown-item">
+                                            Delete
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                        </td>
+                    </tr>
+                    <!--<contract-view v-for="contract in contracts" :title="contract.name"></contract-view>-->
+                    </tbody>
+                </table>
+            </div>
+
+            <div @click="clear_all_company();" id="all-companies-holder" class="column is-offset-2 animated fadeIn"
+                 v-if="companies_active">
+                <table class="table is-striped is-hoverable is-fullwidth">
+                    <thead class="is-fixed-top">
+                    <tr>
+                        <th>Name</th>
+                        <th>Contact Person</th>
+                        <th>Email</th>
+                        <th>Contact</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr v-for="company in companies">
+                        <td v-text="company.name"></td>
+                        <td v-text="company.contact_person"></td>
+                        <td v-text="company.email"></td>
+                        <td>
+                            <span v-text="company.contact"></span>
+                            <div :class="{'is-active':company.popup_active}" class="dropdown is-right is-pulled-right">
+                                <div @click.stop="current_state = company.popup_active; clear_all_company(); company.popup_active = !(current_state);"
+                                     class="dropdown-trigger">
+                                    <img aria-haspopup="true" :aria-controls="company.pk"
+                                         src='{% static "img/ic_more_vert_24px.svg" %}' alt="More">
+                                </div>
+                                <div class="dropdown-menu" :id="company.pk" role="menu">
+                                    <div class="dropdown-content">
+                                        <a @click="company.popup_active = false; details(company.pk);"
+                                           class="dropdown-item">
+                                            Details
+                                        </a>
+                                        <a @click="company.popup_active = false; edit_clicked(company.pk)"
+                                           class="dropdown-item" target="_blank">
+                                            Edit
+                                        </a>
+                                        <a @click="company.popup_active = false; delete_clicked(company.pk)"
+                                           class="dropdown-item" target="_blank">
+                                            Delete
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                        </td>
+                    </tr>
+                    <!--<contract-view v-for="contract in contracts" :title="contract.name"></contract-view>-->
+                    </tbody>
+                </table>
+            </div>
+
+            <div @click="clear_all_manager();" id="managers-holder" class="column is-offset-2 animated fadeIn"
+                 v-if="managers_active">
+                <div class="columns is-multiline">
+                    <div v-for="manager in managers" class="card box column is-3 is-offset-1">
+                        <div class="card-content">
+                            <div :class="{'is-active':manager.popup_active}" class="dropdown is-right is-pulled-right">
+                                <div @click.stop="current_state = manager.popup_active; clear_all(); manager.popup_active = !(current_state);"
+                                     class="dropdown-trigger">
+                                    <img aria-haspopup="true" :aria-controls="manager.pk"
+                                         src={% static "img/ic_more_vert_24px.svg" %} alt="More">
+                                </div>
+                                <div class="dropdown-menu" :id="manager.pk" role="menu">
+                                    <div class="dropdown-content">
+                                        <a @click="manager.popup_active = false; edit_clicked(manager.pk);" href="#"
+                                           class="dropdown-item">
+                                            Edit
+                                        </a>
+                                        <a @click="manager.popup_active = false; delete_clicked(manager.pk)"
+                                           class="dropdown-item" target="_blank">
+                                            Delete
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                            <span class="subtitle" v-text="manager.name"></span>
+                            <hr>
+                            <span v-text="manager.email"></span>
+                            <br>
+                            <span v-text="manager.contact"></span>
+                        </div>
+                        <footer class="card-footer"><a class="card-footer-item"><span
+                                class="button is-primary">Contact</span></a></footer>
+                    </div>
+                </div>
+            </div>
+
+            <div id="notifs-holder" class="column is-offset-2 animated fadeIn" v-if="notifs_active">
+                <span class="title">Notifications</span>
+                <hr>
+                <div class="columns is-multiline">
+                    <div v-for="notif in notifs" class="card box column is-3 is-offset-1">
+                        <div class="card-content">
+                            <span class="subtitle" v-text="notif.name"></span>
+                            <hr>
+                            <span v-text="notif.when_time_left"></span>
+                        </div>
+                        <footer class="card-footer"><a class="card-footer-item">
+                            <span @click="delete_clicked(notif.pk)" class="button is-danger">Delete</span></a>
+                        </footer>
+                    </div>
+                </div>
+                <hr>
+                <label class="checkbox">
+                    <input type="checkbox">
+                    <!-- TODO Hook this up to actual model-->
+                    Notify department head as well
+                </label>
+            </div>
+
+            <div :class="{'is-active': delete_active}" class="modal">
+                <div class="modal-card">
+                    <header class="modal-card-head">
+                        <p class="modal-card-title" v-text="'Delete ' + current_singular"></p>
+                    </header>
+                    <section class="modal-card-body">
+                        Are you sure?
+                    </section>
+                    <footer class="modal-card-foot">
+                        <div class="fill-parent-width field is-grouped is-grouped-right">
+                            <button @click="confirm_delete();" class="button is-danger">Delete</button>
+                            <button @click="cancel_delete();" class="button is-primary">Cancel</button>
+                        </div>
+                    </footer>
+                </div>
+            </div>
+
+            <div :class="{'is-active': add_active}" class="modal animated fadeIn">
+                <div @click="close_add();" class="modal-background"></div>
+                <div class="modal-card">
+                    <header class="modal-card-head">
+                        <p class="modal-card-title" v-text="action + ' ' + current_singular"></p>
+                    </header>
+                    <section class="modal-card-body">
+                        <div id="loader-holder" class="animated fadeIn fill-parent" v-if="loading"><img
+                                class="image is-image-centered" src={% static "img/dual_ring.gif" %} alt="Loading...">
+                        </div>
+                        <iframe @error="content_holder_loaded();" @load="content_holder_loaded();"
+                                id="frame-content-holder" class="animated fadeIn fill-parent-width" :src="add_source"
+                                frameborder="0"></iframe>
+                    </section>
+                    <button @click="close_add();" class="modal-close is-large" aria-label="close"></button>
+                </div>
+            </div>
+
+
+            <!--<div id="frame-holder" class="column is-offset-2 animate fadeInRight is-centered is-10" v-if="add_active">-->
+            <!--<iframe @load="content_holder_loaded();" id="frame-content-holder" class="fill-parent-width" :src="add_source" frameborder="0"></iframe>-->
+            <!--</div>-->
+
+        </div>
+    </div>
+
+</div>
+</body>
+</html>

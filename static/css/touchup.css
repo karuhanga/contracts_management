@@ -1,0 +1,80 @@
+.fill-parent {
+    width: 100% !important;
+    height: 100% !important;
+}
+
+.fill-parent-width {
+    width: 100% !important;
+}
+
+.fill-parent-height {
+    height: 100% !important;
+}
+
+.no-margins {
+    margin: 0 !important;
+    padding: 0 !important;
+}
+
+#nav-menu {
+    height: 100% !important;
+}
+
+#search-bar {
+    height: 46px;
+}
+
+#navbar-item-search {
+    width: 580px;
+}
+
+.navbar {
+    min-height: 62px !important;
+    box-shadow: -1px 1px 8.5px -6px rgba(0, 0, 0, 0.75);
+}
+
+.push-right {
+    float: right !important;
+}
+
+.is-fixed {
+    position: fixed;
+}
+
+[v-cloak] {
+    display: none;
+}
+
+.spinner {
+    display: none !important;
+}
+
+[v-cloak].spinner {
+    display: block !important;
+}
+
+#managers-holder, #notifs-holder {
+    padding: 50px !important;
+}
+
+aside {
+    border-right: 1px solid #00d1b2;
+}
+
+iframe, #loader-holder {
+    min-height: 620px !important;
+}
+
+.is-image-centered {
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.errorlist {
+    color: crimson;
+}
+
+.column .card {
+    margin-bottom: 1.5rem;
+}

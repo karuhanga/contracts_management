@@ -5,6 +5,7 @@
 <head>
     <meta charset="UTF-8">
     <title>Contracts</title>
+    <link rel="stylesheet" href='{% static "css/touchup.css" %}' type="text/css">
     <link rel="stylesheet" href='{% static "css/bulma.min.css" %}'>
 </head>
 <body>
@@ -13,7 +14,15 @@
 
         <div class="column is-narrow is-center is-offset-one-quarter">
 
+            {% if form.instance and form.instance.pk %}
+
+                <form method="post" action="{% url 'contracts_update' form.instance.pk %}">
+
+            {% else %}
+
             <form method="post" action="{% url 'contracts_create' %}">
+
+            {% endif %}
                 {% csrf_token %}
                 {% for field in form %}
                     <div class="control">

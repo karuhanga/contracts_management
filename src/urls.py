@@ -20,7 +20,7 @@ from core import urls as core_urls
 from notifier import urls as notifier_urls
 
 urlpatterns = [
-    path('notifications', include(notifier_urls)),
+    path('notifications/', include(notifier_urls)),
     path('', include(core_urls)),
     path('admin/', admin.site.urls),
 
