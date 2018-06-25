@@ -63,4 +63,5 @@ def acknowledge_contract(request, pk=None, contract=None):
     notification_point = NotificationPoint.objects.get(pk=pk)
     status, created = NotificationStatus.objects.get_or_create(contract=contract, notification_point=notification_point)
     status.action_taken = True
+    status.save()
     return redirect(contract.get_absolute_url())

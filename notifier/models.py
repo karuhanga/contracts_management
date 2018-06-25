@@ -22,7 +22,7 @@ class NotificationStatus(models.Model):
 
     contract = models.ForeignKey('core.Contract', on_delete=models.CASCADE)
     notification_point = models.ForeignKey('NotificationPoint', on_delete=models.CASCADE)
-    action_taken = False
+    action_taken = models.BooleanField(default=False)
 
     def __str__(self):
         return self.contract.name + " at " + self.notification_point.name

@@ -2,6 +2,7 @@ from datetime import date, timedelta
 
 from django.urls import reverse
 
+from core.utils.StringUtils import DOMAIN
 from core.utils.monitor_utils import log, test_log
 from .email import send_email
 
@@ -31,8 +32,8 @@ def get_date(i):
 # logs - No
 def generate_body(notification_point, contract):
     return "This is to inform you of a looming contract expiry.\nDetails:\n" + contract.summary() + "\n\nThis contract expires in " + str(
-        notification_point) + ".\n If you have set things in progress and taken action already, you can snooze this reminder. \n Snooze(" + reverse(
-        'contract', kwargs={'pk': notification_point, 'contract': contract}) + ")"
+        notification_point) + ".\n If you have set things in progress and taken action already, you can snooze this reminder. \n Snooze(" + DOMAIN + reverse(
+        'acknowledge', kwargs={'pk': notification_point.pk, 'contract': contract.pk}) + ")"
 
 
 def generate_subject(notification_point):
@@ -55,7 +56,7 @@ def notify(notification_point, contract):
 # logs - No
 def notify_passed(contract):
     subject = "Contract Review Overdue"
-    body = "Details: \n" + str(contract)
+    body = "Details: \n" + str(contract.summary())
     to = contract.contract_manager.email
     # bcc TODO Implement optional carbon copy to manager
 
