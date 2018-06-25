@@ -32,7 +32,7 @@ def get_date(i):
 # logs - No
 def generate_body(notification_point, contract):
     return "This is to inform you of a looming contract expiry.\nDetails:\n" + contract.summary() + "\n\nThis contract expires in " + str(
-        notification_point) + ".\n If you have set things in progress and taken action already, you can snooze this reminder. \n Snooze(" + DOMAIN + reverse(
+        notification_point).lower() + ".\n If you have set things in progress and taken action already, you can snooze this reminder. \n Snooze(" + DOMAIN + reverse(
         'acknowledge', kwargs={'pk': notification_point.pk, 'contract': contract.pk}) + ")"
 
 

@@ -23,7 +23,7 @@ class Section(models.Model):
     description = models.TextField()
 
     def __str__(self):
-        return self.description
+        return self.name
 
     def get_absolute_url(self):
         return reverse('section', kwargs={'pk': self.pk})
@@ -57,7 +57,7 @@ class Contract(models.Model):
     contract_manager = models.ForeignKey('ContractManager', on_delete=models.PROTECT)
 
     def summary(self):
-        return "Name: {} \nDescription: {} \nSection: {} \nCompany: {} \nExpiring: {} \n".format(self.name,
+        return "Name: {} \nDescription: {} \nSection: {} \nCompany: {} \nExpiry date: {} \n".format(self.name,
                                                                                                  self.description,
                                                                                                  self.section,
                                                                                                  self.company,
