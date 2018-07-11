@@ -84,7 +84,9 @@
                         <th>Started</th>
                         <th>
                             Expires
-                            <div :class="{'is-active':sort_menu_active}" class="dropdown is-right is-pulled-right">
+                        </th>
+                        <th>
+                            <div :class="{'is-active':sort_menu_active}" class="dropdown is-right">
                                 <div @click.stop="sort_menu_active = !sort_menu_active;" class="dropdown-trigger">
                                     <img aria-haspopup="true" aria-controls="sort-menu"
                                          src={% static "img/ic_more_vert_24px.svg" %}
@@ -118,7 +120,10 @@
                         <td v-text="contract.start_date"></td>
                         <td>
                             <span v-text="contract.expiry_date"></span>
-                            <div :class="{'is-active':contract.popup_active}" class="dropdown is-right is-pulled-right">
+
+                        </td>
+                        <td>
+                            <div :class="{'is-active':contract.popup_active}" class="dropdown is-right">
                                 <div @click.stop="current_state = contract.popup_active; clear_all(); contract.popup_active = !(current_state);"
                                      class="dropdown-trigger">
                                     <img aria-haspopup="true" :aria-controls="contract.pk"
