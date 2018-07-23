@@ -44,9 +44,9 @@ def notify(notification_point, contract):
     subject = generate_subject(notification_point)
     body = generate_body(notification_point, contract)
     to = contract.contract_manager.email
-    # bcc TODO Implement optional carbon copy to manager
+    cc = [contract.section.section_manager_email]
 
-    send_email(to, subject, body)
+    send_email(to, cc, subject, body)
 
 
 # notifies concerned party of expiry
@@ -58,9 +58,9 @@ def notify_passed(contract):
     subject = "Contract Review Overdue"
     body = "Details: \n" + str(contract.summary())
     to = contract.contract_manager.email
-    # bcc TODO Implement optional carbon copy to manager
+    cc = [contract.section.section_manager_email]
 
-    send_email(to, subject, body)
+    send_email(to, cc, subject, body)
 
 
 # generates dates based on arg(notification_points)
