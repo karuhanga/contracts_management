@@ -21,6 +21,8 @@ class ContractManager(models.Model):
 class Section(models.Model):
     name = models.CharField(max_length=20)
     description = models.TextField()
+    section_manager = models.CharField(max_length=100)
+    section_manager_email = models.EmailField()
 
     def __str__(self):
         return self.name

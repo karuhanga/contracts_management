@@ -47,7 +47,7 @@
                 <p class="menu-label">CONTRACTS DESK</p>
                 <ul class="menu-list">
                     <li><a @click="show_upcoming();" :class="{'is-active':upcoming_active}">Review upcoming</a></li>
-                    <li><a @click="show_all();" :class="{'is-active':all_active}">All Contracts</a></li>
+                    {#                    <li><a @click="show_all();" :class="{'is-active':all_active}">Contracts</a></li>#}
                     <li><a @click="show_companies();" :class="{'is-active':companies_active}">Companies</a></li>
                     <li><a @click="show_managers();" :class="{'is-active':managers_active}">Managers</a></li>
                 </ul>
@@ -62,13 +62,13 @@
                     </a>
                     <hr>
                 </div>
-                <div class="has-text-centered animated fadeIn">
-                    Last notification: <br>
-                    11/6/18
-                    <hr>
-                    Earliest contract due: <br>
-                    13/7/18
-                </div>
+                {#                <div class="has-text-centered animated fadeIn">#}
+                {#                    Last notification: <br>#}
+                {#                    11/6/18#}
+                {#                    <hr>#}
+                {#                    Earliest contract due: <br>#}
+                {#                    13/7/18#}
+                {#                </div>#}
             </aside>
 
             <div class="spinner column is-offset-2"><img src='{% static "img/dual_ring.gif" %}' alt="Loading..."></div>
@@ -135,10 +135,6 @@
                                            class="dropdown-item">
                                             Details
                                         </a>
-                                        <a @click="contract.popup_active = false; contact_company(contract.pk);"
-                                           class="dropdown-item">
-                                            Contact Company
-                                        </a>
                                         <!--<a @click="update_expiry(contract.pk);" href="#" class="dropdown-item">-->
                                         <!--Update Expiry-->
                                         <!--</a>-->
@@ -190,6 +186,11 @@
                                            class="dropdown-item">
                                             Details
                                         </a>
+                                        <a @click="company.popup_active = false; email_to_clicked();"
+                                           :href="'mailto:' + company.email"
+                                           class="dropdown-item">
+                                            Contact Company
+                                        </a>
                                         <a @click="company.popup_active = false; edit_clicked(company.pk)"
                                            class="dropdown-item" target="_blank">
                                             Edit
@@ -238,7 +239,8 @@
                             <br>
                             <span v-text="manager.contact"></span>
                         </div>
-                        <footer class="card-footer"><a class="card-footer-item"><span
+                        <footer class="card-footer"><a @click="email_to_clicked();" :href="'mailto:' + manager.email"
+                                                       class="card-footer-item"><span
                                 class="button is-primary">Contact</span></a></footer>
                     </div>
                 </div>
@@ -246,6 +248,9 @@
 
             <div id="notifs-holder" class="column is-offset-2 animated fadeIn" v-if="notifs_active">
                 <span class="title">Notifications</span>
+                <br>
+                Email reminders will be sent to relevant parties about pending renewals when these times are left to
+                contract expiries
                 <hr>
                 <div class="columns is-multiline">
                     <div v-for="notif in notifs" class="card box column is-3 is-offset-1">
@@ -259,12 +264,12 @@
                         </footer>
                     </div>
                 </div>
-                <hr>
-                <label class="checkbox">
-                    <input type="checkbox">
-                    <!-- TODO Hook this up to actual model-->
-                    Notify department head as well
-                </label>
+                {#                <hr>#}
+                {#                <label class="checkbox">#}
+                {#                    <input type="checkbox">#}
+                {#                    <!-- TODO Hook this up to actual model-->#}
+                {#                    Notify department head as well#}
+                {#                </label>#}
             </div>
 
             <div :class="{'is-active': delete_active}" class="modal">

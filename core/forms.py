@@ -26,7 +26,8 @@ class SectionForm(forms.ModelForm):
         super(SectionForm, self).__init__(*args, **kwargs)
         self.fields['name'].widget.attrs.update({CLASS: INPUT})
         self.fields['description'].widget.attrs.update({CLASS: INPUT})
-
+        self.fields['section_manager'].widget.attrs.update({CLASS: INPUT})
+        self.fields['section_manager_email'].widget.attrs.update({CLASS: INPUT})
 
 
 class CompanyForm(forms.ModelForm):

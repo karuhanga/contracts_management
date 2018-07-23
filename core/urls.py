@@ -26,6 +26,7 @@ urlpatterns = [
     path('', views.home, name="dashboard"),
     path('success', views.success, name="success"),
     path('contracts', views.get_contracts, name="contracts_retrieve"),
+    path('contracts_sec', views.get_contracts_sec, name="contracts_sec_retrieve"),
     path('contracts/add', ContractsViewCreate.as_view(), name="contracts_create"),
     path('contracts/<int:pk>', ContractsViewRetrieve.as_view(), name="contract"),
     path('contracts/<int:pk>/update', ContractsViewUpdate.as_view(), name="contracts_update"),

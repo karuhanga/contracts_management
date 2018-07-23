@@ -1,5 +1,6 @@
 var app_state;
 var contracts = [];
+var contracts_sec = [];
 var companies = [];
 var managers = [];
 var notifs = [];
@@ -13,6 +14,7 @@ const MANAGERS = "Managers";
 const NOTIFICATION = "Notifications";
 const COMPANIES_URL = CORE_URL + "companies";
 const CONTRACTS_URL = CORE_URL + "contracts";
+const CONTRACTS_SECTION_URL = CORE_URL + "contracts_sec";
 const MANAGERS_URL = CORE_URL + "managers";
 const NOTIFICATIONS_URL = CORE_URL + "notifications";
 const separator = "/";
@@ -526,6 +528,14 @@ function fetch_contracts() {
     });
 }
 
+function fetch_contracts_section() {
+    fetch(CONTRACTS_SECTION_URL).then(function (data) {
+        data.json().then(function (value) {
+            contracts_sec = value;
+        })
+    });
+}
+
 function fetch_companies() {
     fetch(COMPANIES_URL).then(function (data) {
         data.json().then(function (value) {
@@ -562,6 +572,8 @@ function fetch_data() {
 
     fetch_contracts();
 
+    fetch_contracts_section();
+
     fetch_companies();
 
     fetch_managers();
@@ -575,6 +587,16 @@ function toast_ok(message) {
         position: 'bottom',
         timeout: 3000,
         type: 'success',
+        square: true
+    });
+}
+
+function toast_info(message) {
+    nativeToast({
+        message: message,
+        position: 'bottom',
+        timeout: 3000,
+        type: 'info',
         square: true
     });
 }
@@ -593,6 +615,7 @@ function refreshData(current) {
     switch (current) {
         case CONTRACTS:
             fetch_contracts();
+            fetch_contracts_section();
             break;
         case "Companies":
             fetch_companies();
@@ -632,7 +655,9 @@ function initVariables() {
             add_source: "",
             loading: false,
             action: "Add",
-            in_delete: ""
+            in_delete: "",
+            by_upcoming: true,
+            by_section: false
         },
         methods: {
             details: function (pk) {
@@ -651,6 +676,9 @@ function initVariables() {
             cancel_delete: function () {
                 this.in_delete = "";
                 this.delete_active = false;
+            },
+            email_to_clicked: function () {
+                toast_info("Launching Email Application...");
             },
             confirm_delete: function () {
                 var entity = "";
@@ -732,11 +760,15 @@ function initVariables() {
                 this.delete_active = true;
             },
             sort_upcoming: function () {
-                // TODO
+                this.by_upcoming = true;
+                this.by_section = false;
+                this.contracts = contracts;
                 this.sort_menu_active = false;
             },
             sort_section: function () {
-                // TODO
+                this.by_section = true;
+                this.by_upcoming = false;
+                this.contracts = contracts_sec;
                 this.sort_menu_active = false;
             },
             clear_all: function () {
@@ -833,7 +865,12 @@ function initVariables() {
                 var instance;
                 switch (this.current) {
                     case CONTRACTS:
-                        this.contracts = contracts.filter(matches(this.search_text));
+                        if (this.by_upcoming) {
+                            this.contracts = contracts.filter(matches(this.search_text));
+                        }
+                        else {
+                            this.contracts = contracts_sec.filter(matches(this.search_text));
+                        }
                         break;
                     case "Companies":
                         this.companies = companies.filter(matches(this.search_text));

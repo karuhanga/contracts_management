@@ -33,7 +33,16 @@ def home(request):
 
 
 def get_contracts(request):
-    data = jsonify(Contract.objects.all())
+    data = jsonify(Contract.objects.order_by('expiry_date').all())
+    for datum in data:
+        datum["section"] = Section.objects.get(pk=datum["section"]).name
+        datum["company"] = Company.objects.get(pk=datum["company"]).name
+        datum["contract_manager"] = ContractManager.objects.get(pk=datum["contract_manager"]).name
+    return JsonResponse(data, safe=False)
+
+
+def get_contracts_sec(request):
+    data = jsonify(Contract.objects.order_by('section').all())
     for datum in data:
         datum["section"] = Section.objects.get(pk=datum["section"]).name
         datum["company"] = Company.objects.get(pk=datum["company"]).name
