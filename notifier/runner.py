@@ -83,8 +83,7 @@ def generate_dates(notification_points):
 def check_notify(contract, notification_points):
     if TODAY > contract.expiry_date:
         status, created = NotificationStatus.objects.get_or_create(contract=contract,
-                                                                   notification_point=notification_points[
-                                                                       len(notification_points) - 1])
+                                                                   notification_point=notification_points[0])
         if status.action_taken:
             log("Notification was cancelled")
         else:
