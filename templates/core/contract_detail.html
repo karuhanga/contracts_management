@@ -13,17 +13,59 @@
 <section class="section">
     <div class="columns">
         <div class="column is-2 has-text-centered is-offset-5">
-            {{ object.name }}
-            <hr>
-            {{ object.description }}
-            <hr>
-            {{ object.section }}
-            <hr>
-            {{ object.company }}
-            <hr>
-            Started : {{ object.start_date }}
-            <hr>
-            End Date: {{ object.expiry_date }}
+            <table class="table">
+                <tr>
+                    <td>Name</td>
+                    <td>:</td>
+                    <td>{{ object.name }}</td>
+                </tr>
+                <tr>
+                    <td>Description</td>
+                    <td>:</td>
+                    <td>{{ object.description }}</td>
+                </tr>
+                <tr>
+                    <td>Section</td>
+                    <td>:</td>
+                    <td>{{ object.section }}</td>
+                </tr>
+                <tr>
+                    <td>Company</td>
+                    <td>:</td>
+                    <td>{{ object.company }}</td>
+                </tr>
+                <tr>
+                    <td>Start date</td>
+                    <td>:</td>
+                    <td>{{ object.start_date }}</td>
+                </tr>
+                <tr>
+                    <td>Expiry date</td>
+                    <td>:</td>
+                    <td>{{ object.expiry_date }}</td>
+                </tr>
+                <tr>
+                    <td>Active?</td>
+                    <td>:</td>
+                    <td>
+                        {% if object.is_active %}
+                            Yes
+                        {% else %}
+                            No
+                        {% endif %}
+                    </td>
+                </tr>
+                <tr>
+                    <td>Comments</td>
+                    <td>:</td>
+                    <td>{{ object.comments }}</td>
+                </tr>
+                <tr>
+                    <td>Contract Manager</td>
+                    <td>:</td>
+                    <td>{{ object.contract_manager }}</td>
+                </tr>
+            </table>
         </div>
     </div>
 </section>

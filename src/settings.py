@@ -39,6 +39,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'core.apps.CoreConfig',
     'notifier.apps.NotifierConfig',
+    'import_export',
 ]
 
 MIDDLEWARE = [
@@ -135,8 +136,10 @@ DATE_INPUT_FORMATS = [
 STATIC_URL = '/static/'
 
 STATICFILES_DIRS = [
-    os.path.join(BASE_DIR, "static"),
+    os.path.join(BASE_DIR, "core", "static"),
 ]
+
+STATIC_ROOT = os.path.join(BASE_DIR, "static")
 
 # Email Validation Settings
 EMAIL_USE_TLS = True

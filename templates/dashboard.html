@@ -10,6 +10,8 @@
     <link rel="stylesheet" href='{% static "css/bulma-docs.min.css" %}' type="text/css">
     <link rel="stylesheet" href='{% static "css/native-toast.css" %}' type="text/css">
     <link rel="stylesheet" href='{% static "css/animate.min.css" %}' type="text/css" media="all"/>
+    <link rel="icon"
+          href="https://cdn0.iconfinder.com/data/icons/files-documents/512/YPS__file_document_to_sign_signature_signed_sign_sheet_contract_paper_page_text-512.png">
     <script type="text/javascript" src='{% static "js/vue.js" %}'></script>
     <script type="text/javascript" src='{% static "js/state.js" %}'></script>
     <script type="text/javascript" src='{% static "js/native-toast.min.js" %}'></script>
@@ -82,9 +84,7 @@
                         <th>Section</th>
                         <th>Contractor</th>
                         <th>Started</th>
-                        <th>
-                            Expires
-                        </th>
+                        <th>Expires</th>
                         <th>
                             <div :class="{'is-active':sort_menu_active}" class="dropdown is-right">
                                 <div @click.stop="sort_menu_active = !sort_menu_active;" class="dropdown-trigger">
@@ -110,6 +110,7 @@
                                 </div>
                             </div>
                         </th>
+                        <th class="is-super-narrow"></th>
                     </tr>
                     </thead>
                     <tbody>
@@ -118,10 +119,7 @@
                         <td v-text="contract.section"></td>
                         <td v-text="contract.company"></td>
                         <td v-text="contract.start_date"></td>
-                        <td>
-                            <span v-text="contract.expiry_date"></span>
-
-                        </td>
+                        <td v-text="contract.expiry_date"></td>
                         <td>
                             <div :class="{'is-active':contract.popup_active}" class="dropdown is-right">
                                 <div @click.stop="current_state = contract.popup_active; clear_all(); contract.popup_active = !(current_state);"
@@ -150,6 +148,7 @@
                                 </div>
                             </div>
                         </td>
+                        <td class="is-super-narrow" :class="[get_color(contract)]"></td>
                     </tr>
                     <!--<contract-view v-for="contract in contracts" :title="contract.name"></contract-view>-->
                     </tbody>

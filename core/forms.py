@@ -1,8 +1,7 @@
 from django import forms
 from core.models import ContractManager, Section, Company, Contract
 
-
-from core.utils.StringUtils import CLASS, INPUT, TEXT_AREA, SELECT
+from core.utils.StringUtils import CLASS, INPUT, TEXT_AREA, SELECT, CHECKBOX
 
 
 class ContractManagerForm(forms.ModelForm):
@@ -57,3 +56,5 @@ class ContractForm(forms.ModelForm):
         self.fields['start_date'].widget.attrs.update({CLASS: INPUT})
         self.fields['expiry_date'].widget.attrs.update({CLASS: INPUT})
         self.fields['contract_manager'].widget.attrs.update({INPUT: SELECT})
+        self.fields['is_active'].widget.attrs.update({INPUT: CHECKBOX})
+        self.fields['comments'].widget.attrs.update({CLASS: TEXT_AREA, 'rows': '3'})

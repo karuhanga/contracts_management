@@ -1,5 +1,4 @@
-
-
+debug = False;
 # writes message to log file
 # args - message to write
 # returns - None
@@ -9,4 +8,5 @@ def log(info):
 
 
 def test_log(data):
-    print(data)
+    if debug:
+        print(data)

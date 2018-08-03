@@ -54,9 +54,15 @@ def notify(notification_point, contract):
 # args - a contract
 # returns - None
 # logs - No
+def delete_other_notifiers(contract):
+    NotificationStatus.objects.get(contract=contract).delete()
+
+
 def notify_passed(contract):
     subject = "Contract Review Overdue"
     body = "Details: \n" + str(contract.summary())
+    body += "\nYou can mark this contract as inactive here({}) to stop these reminders.".format(
+        contract.get_absolute_url())
     to = contract.contract_manager.email
     cc = [contract.section.section_manager_email]
 
@@ -84,10 +90,12 @@ def check_notify(contract, notification_points):
     if TODAY > contract.expiry_date:
         status, created = NotificationStatus.objects.get_or_create(contract=contract,
                                                                    notification_point=notification_points[0])
-        if status.action_taken:
-            log("Notification was cancelled")
-        else:
+        delete_other_notifiers(contract)
+        if contract.is_active:
             notify_passed(contract)
+        else:
+            log("#check_notify: Notification was cancelled")
+
         return
 
     for i in range(0, len(notification_points)):
