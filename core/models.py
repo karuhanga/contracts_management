@@ -46,6 +46,9 @@ class Company(models.Model):
     def get_absolute_url(self):
         return reverse('company', kwargs={'pk': self.pk})
 
+    def get_absolute_edit_url(self):
+        return self.get_absolute_url() + "/update"
+
 
 class Contract(models.Model):
     name = models.CharField(max_length=100)
@@ -74,3 +77,6 @@ class Contract(models.Model):
 
     def get_absolute_url(self):
         return reverse('contract', kwargs={'pk': self.pk})
+
+    def get_absolute_edit_url(self):
+        return self.get_absolute_url() + "/update"

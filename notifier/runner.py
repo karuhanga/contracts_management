@@ -2,11 +2,10 @@ from datetime import date, timedelta
 
 from django.urls import reverse
 
+from core.models import Contract
 from core.utils.StringUtils import DOMAIN
 from core.utils.monitor_utils import log, test_log
 from .email import send_email
-
-from core.models import Contract
 from .models import NotificationPoint, NotificationStatus
 
 TODAY = ''  # Holds today's date
@@ -32,12 +31,13 @@ def get_date(i):
 # logs - No
 def generate_body(notification_point, contract):
     return "This is to inform you of a looming contract expiry.\nDetails:\n" + contract.summary() + "\n\nThis contract expires in " + str(
-        notification_point).lower() + ".\n If you have set things in progress and taken action already, you can snooze this reminder. \n Snooze(" + DOMAIN + reverse(
+        notification_point).lower() + ".\n If you have set things in motion and taken action already, you can snooze this reminder. \n Snooze(" + DOMAIN + reverse(
         'acknowledge', kwargs={'pk': notification_point.pk, 'contract': contract.pk}) + ")"
 
 
 def generate_subject(notification_point):
-    return "Contract Review due in " + str(notification_point)
+    # return "Contract Review due in " + str(notification_point)
+    return "Contract Review Due- Reminder"
 
 
 def notify(notification_point, contract):
@@ -62,7 +62,7 @@ def notify_passed(contract):
     subject = "Contract Review Overdue"
     body = "Details: \n" + str(contract.summary())
     body += "\nYou can mark this contract as inactive here({}) to stop these reminders.".format(
-        contract.get_absolute_url())
+        DOMAIN + contract.get_absolute_edit_url())
     to = contract.contract_manager.email
     cc = [contract.section.section_manager_email]
 
@@ -101,8 +101,8 @@ def check_notify(contract, notification_points):
     for i in range(0, len(notification_points)):
         date_to_check = get_date(i)
         if date_to_check > contract.expiry_date:
-            print(contract)
-            print(notification_points[i])
+            test_log(contract)
+            test_log(notification_points[i])
             status, created = NotificationStatus.objects.get_or_create(contract=contract,
                                                                        notification_point=notification_points[i])
             if status.action_taken:
