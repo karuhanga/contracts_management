@@ -1,0 +1,29 @@
+Python 3.6.*
+Apache 2.4+
+Microsoft visual C++ 14.0 build tools
+All 64bit or 32bit. do not mix
+
+1. set the path MOD_WSGI_APACHE_ROOTDIR to apache root directory
+Download and install Microsoft visual C++ 14.0 build tools- from (https://download.visualstudio.microsoft.com/download/pr/5426f054-a10a-441f-b8a9-f7135d58d59b/48510132eb9254121dd72072197308f6/vs_buildtools.exe)
+ensure pip is actually working
+pip install mod_wsgi
+
+if errror(cannot include file 'httpd.h'):
+	look for an apache version that actually has all the necessary files(http://www.apachelounge.com/download/)
+	ensure you update the path in 2
+
+
+run this
+	mod_wsgi-express module-config
+copy output and add it to apache conf
+	probably at C:\Apache24\conf
+
+follow configs at (https://modwsgi.readthedocs.io/en/develop/user-guides/quick-configuration-guide.html)
+basic conf file already in current dir. **update paths
+
+do the remaining basics
+	install requirements
+	add credentials file
+	migrate
+	collectstatic
+	createsuperuser
